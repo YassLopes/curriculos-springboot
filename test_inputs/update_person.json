@@ -1,0 +1,88 @@
+{
+    "name": "Yasmin Lopes",
+    "email": "yasslopes2001.atualizado@gmail.com",
+    "phone": "+55 81 99999 8888",
+    "address": "Rua da Angustura, n225",
+    "city": "Recife",
+    "state": "PE",
+    "country": "Brasil",
+    "zipCode": "52050-340",
+    "birthDate": "2001-01-08",
+    "summary": "Desenvolvedora de software focada na área de dados, com experiência em Python e Java.",
+    "educations": [
+        {
+            "institution": "Universidade Católica de Pernambuco",
+            "degree": "Sistemas para Internet",
+            "fieldOfStudy": "Ciência da Computação",
+            "startDate": "2023-02-01",
+            "endDate": "2025-11-30",
+            "gpa": 10,
+            "description": "Formada com honras. Especializado em Ciência de Dados."
+        },
+        {
+            "institution": "Faculdade de Tecnologia de Pernambuco",
+            "degree": "Pós-graduação",
+            "fieldOfStudy": "Ciência de Dados",
+            "startDate": "2024-02-01",
+            "endDate": "2025-02-01",
+            "gpa": 9.5,
+            "description": "Especialização em Análise de Dados e Machine Learning."
+        }
+    ],
+    "experiences": [
+        {
+            "company": "Soluções Tech Ltda",
+            "position": "Desenvolvedora",
+            "startDate": "2023-01-01",
+            "endDate": "2023-12-31",
+            "description": "Liderou o desenvolvimento de aplicações empresariais usando Python e Java.",
+            "location": "Recife, PE",
+            "employmentType": "Tempo integral"
+        },
+        {
+            "company": "Data Solutions",
+            "position": "Analista de Dados",
+            "startDate": "2024-01-01",
+            "description": "Desenvolvendo soluções de análise de dados e visualização.",
+            "location": "Recife, PE",
+            "employmentType": "Tempo integral"
+        }
+    ],
+    "skills": [
+        {
+            "name": "Python",
+            "level": "Avançado",
+            "category": "Técnico"
+        },
+        {
+            "name": "Java",
+            "level": "Intermediário",
+            "category": "Técnico"
+        },
+        {
+            "name": "SQL",
+            "level": "Avançado",
+            "category": "Técnico"
+        },
+        {
+            "name": "Análise de Dados",
+            "level": "Avançado",
+            "category": "Técnico"
+        },
+        {
+            "name": "Trabalho em Equipe",
+            "level": "Avançado",
+            "category": "Habilidades Interpessoais"
+        }
+    ],
+    "languages": [
+        {
+            "name": "Português",
+            "proficiency": "Nativo"
+        },
+        {
+            "name": "Inglês",
+            "proficiency": "Avançado"
+        }
+    ]
+} 
