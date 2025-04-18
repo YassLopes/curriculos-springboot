@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: curriculum-api
+    env: java
+    buildCommand: ./mvnw clean package -DskipTests
+    startCommand: java -jar target/*.jar
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: curriculum-db
+          property: connectionString
+      - key: SPRING_DATASOURCE_USERNAME
+        fromDatabase:
+          name: curriculum-db
+          property: username
+      - key: SPRING_DATASOURCE_PASSWORD
+        fromDatabase:
+          name: curriculum-db
+          property: password
+      - key: SPRING_PROFILES_ACTIVE
+        value: production
+    healthCheckPath: /actuator/health
+
+databases:
+  - name: curriculum-db
+    databaseName: curriculum_db
+    user: postgres
+    plan: free 
