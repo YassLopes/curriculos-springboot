@@ -8,6 +8,7 @@ services:
         fromDatabase:
           name: curriculum-db
           property: connectionString
+          transform: "jdbc:postgresql://${host}:${port}/${database}"
       - key: SPRING_DATASOURCE_USERNAME
         fromDatabase:
           name: curriculum-db

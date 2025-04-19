@@ -1,5 +1,7 @@
 package com.curriculum.config;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,6 +12,7 @@ import com.zaxxer.hikari.HikariDataSource;
 @Configuration
 @Profile("production")
 public class DatabaseConfig {
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseConfig.class);
 
     @Value("${SPRING_DATASOURCE_URL}")
     private String dbUrl;
@@ -22,8 +25,15 @@ public class DatabaseConfig {
 
     @Bean
     public HikariDataSource dataSource() {
+        logger.info("Database URL: {}", dbUrl);
+        logger.info("Database Username: {}", dbUsername);
+        
         HikariConfig config = new HikariConfig();
-        config.setJdbcUrl(dbUrl);
+        
+        // Ensure the URL starts with jdbc:postgresql://
+        String jdbcUrl = dbUrl.startsWith("jdbc:postgresql://") ? dbUrl : "jdbc:postgresql://" + dbUrl;
+        config.setJdbcUrl(jdbcUrl);
+        
         config.setUsername(dbUsername);
         config.setPassword(dbPassword);
         config.setDriverClassName("org.postgresql.Driver");
