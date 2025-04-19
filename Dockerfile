@@ -30,7 +30,9 @@ RUN apk add --no-cache \
     zstd \
     lz4 \
     && mkdir -p /var/lib/postgresql/data \
-    && chown -R postgres:postgres /var/lib/postgresql/data
+    && mkdir -p /run/postgresql \
+    && chown -R postgres:postgres /var/lib/postgresql/data \
+    && chown -R postgres:postgres /run/postgresql
 
 # Install OpenJDK
 RUN apk add --no-cache openjdk17-jre
