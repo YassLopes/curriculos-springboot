@@ -21,18 +21,18 @@ PG_PID=$!
 
 # Wait for PostgreSQL to be ready
 echo "Waiting for PostgreSQL to start..."
-until pg_isready -h localhost -p 5432 -U postgres; do
+until pg_isready -h 0.0.0.0 -p 5432 -U postgres; do
     sleep 1
 done
 
 # Create database and user if they don't exist
 echo "Creating database and user..."
-if ! su postgres -c "psql -h localhost -c '\du' | grep -q postgres"; then
-    su postgres -c "psql -h localhost -c \"CREATE USER postgres WITH SUPERUSER PASSWORD 'postgres';\""
+if ! su postgres -c "psql -h 0.0.0.0 -p 5432 -U postgres -c '\du' | grep -q postgres"; then
+    su postgres -c "psql -h 0.0.0.0 -p 5432 -U postgres -c \"CREATE USER postgres WITH SUPERUSER PASSWORD 'postgres';\""
 fi
 
-if ! su postgres -c "psql -h localhost -l" | grep -q curriculum_db; then
-    su postgres -c "psql -h localhost -c \"CREATE DATABASE curriculum_db;\""
+if ! su postgres -c "psql -h 0.0.0.0 -p 5432 -U postgres -l" | grep -q curriculum_db; then
+    su postgres -c "psql -h 0.0.0.0 -p 5432 -U postgres -c \"CREATE DATABASE curriculum_db;\""
 fi
 
 # Start the Spring Boot application
