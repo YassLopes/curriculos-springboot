@@ -7,7 +7,7 @@ chown postgres:postgres /run/postgresql
 # Initialize PostgreSQL data directory if it's empty
 if [ -z "$(ls -A /var/lib/postgresql/data)" ]; then
     echo "Initializing PostgreSQL data directory..."
-    su postgres -c "initdb -D /var/lib/postgresql/data"
+    su postgres -c "initdb -D /var/lib/postgresql/data --auth-host=md5 --auth-local=trust"
 fi
 
 # Configure PostgreSQL to listen on all interfaces
@@ -19,14 +19,21 @@ echo "Starting PostgreSQL..."
 su postgres -c "postgres -D /var/lib/postgresql/data -h 0.0.0.0" &
 PG_PID=$!
 
-# Wait for PostgreSQL to start
+# Wait for PostgreSQL to be ready
 echo "Waiting for PostgreSQL to start..."
-sleep 10
+until pg_isready -h localhost -p 5432 -U postgres; do
+    sleep 1
+done
 
 # Create database and user if they don't exist
 echo "Creating database and user..."
-su postgres -c "psql -h localhost -c \"CREATE USER postgres WITH SUPERUSER PASSWORD 'postgres';\" || true"
-su postgres -c "psql -h localhost -c \"CREATE DATABASE curriculum_db;\" || true"
+if ! su postgres -c "psql -h localhost -c '\du' | grep -q postgres"; then
+    su postgres -c "psql -h localhost -c \"CREATE USER postgres WITH SUPERUSER PASSWORD 'postgres';\""
+fi
+
+if ! su postgres -c "psql -h localhost -l" | grep -q curriculum_db; then
+    su postgres -c "psql -h localhost -c \"CREATE DATABASE curriculum_db;\""
+fi
 
 # Start the Spring Boot application
 echo "Starting Spring Boot application..."

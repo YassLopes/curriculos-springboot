@@ -39,6 +39,7 @@ RUN apk add --no-cache openjdk17-jre
 
 # Copy PostgreSQL binaries and libraries
 COPY --from=postgres /usr/local/bin/postgres /usr/local/bin/
+COPY --from=postgres /usr/local/bin/pg_isready /usr/local/bin/
 COPY --from=postgres /usr/local/lib/postgresql /usr/local/lib/postgresql
 COPY --from=postgres /usr/local/share/postgresql /usr/local/share/postgresql
 
