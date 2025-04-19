@@ -18,10 +18,14 @@ services:
           property: password
       - key: SPRING_PROFILES_ACTIVE
         value: production
+      - key: PORT
+        value: 8080
     healthCheckPath: /actuator/health
+    autoDeploy: true
 
 databases:
   - name: curriculum-db
     databaseName: curriculum_db
     user: postgres
-    plan: free 
+    plan: free
+    postgresVersion: 15 
