@@ -45,6 +45,11 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+        <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jdbc</artifactId>
+            <version>10.1.19</version> <!-- ou a mesma versão do Tomcat que seu Spring Boot usa -->
+        </dependency>
     </dependencies>
     
     <build>
