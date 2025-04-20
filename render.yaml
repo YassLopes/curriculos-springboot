@@ -1,31 +1,13 @@
 services:
   - type: web
-    name: curriculum-api
+    name: curriculum-app
     env: docker
-    dockerfilePath: ./Dockerfile
-    envVars:
-      - key: DATABASE_URL
-        fromDatabase:
-          name: curriculum-db
-          property: connectionString
-      - key: DATABASE_USERNAME
-        fromDatabase:
-          name: curriculum-db
-          property: username
-      - key: DATABASE_PASSWORD
-        fromDatabase:
-          name: curriculum-db
-          property: password
-      - key: SPRING_PROFILES_ACTIVE
-        value: production
-      - key: PORT
-        value: 8080
-    healthCheckPath: /actuator/health
-    autoDeploy: true
-
-databases:
-  - name: curriculum-db
-    databaseName: curriculum_db
-    user: postgres
+    dockerfilePath: Dockerfile
     plan: free
-    postgresVersion: 15 
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        value: jdbc:postgresql://dpg-d01dbkc9c44c73cls6o0-a:5432/db_curriculos_springboot
+      - key: SPRING_DATASOURCE_USERNAME
+        value: db_curriculos_springboot_user
+      - key: SPRING_DATASOURCE_PASSWORD
+        value: yr9h9UP3lfixjlnz26eK7jlLBEmGb0BR

@@ -1,60 +1,31 @@
-# Use multi-stage build
-FROM postgres:15-alpine as postgres
-ENV POSTGRES_DB=curriculum_db
-ENV POSTGRES_USER=postgres
-ENV POSTGRES_PASSWORD=postgres
-COPY init.sql /docker-entrypoint-initdb.d/
-EXPOSE 5432
-
-FROM maven:3.8.4-openjdk-17 as build
+# Use a multi-stage build to reduce the final image size
+FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
+
+# Copy only the POM file first
 COPY pom.xml .
-COPY src ./src
-RUN mvn clean package -DskipTests
 
-FROM alpine:3.19
+# Download dependencies
+RUN mvn dependency:go-offline -B
+
+# Copy source code
+COPY src ./src
+
+# Build the application
+RUN mvn clean package -DskipTests -Dmaven.javadoc.skip=true -Dmaven.source.skip=true
+
+# Create the final image
+FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
 
-# Install PostgreSQL and its dependencies
-RUN apk add --no-cache \
-    postgresql15 \
-    postgresql15-client \
-    postgresql15-contrib \
-    libpq \
-    libxml2 \
-    libxslt \
-    openssl \
-    icu \
-    krb5 \
-    openldap \
-    zstd \
-    lz4 \
-    && mkdir -p /var/lib/postgresql/data \
-    && mkdir -p /run/postgresql \
-    && chown -R postgres:postgres /var/lib/postgresql/data \
-    && chown -R postgres:postgres /run/postgresql
-
-# Install OpenJDK
-RUN apk add --no-cache openjdk17-jre
-
-# Copy PostgreSQL binaries and libraries
-COPY --from=postgres /usr/local/bin/postgres /usr/local/bin/
-COPY --from=postgres /usr/local/bin/pg_isready /usr/local/bin/
-COPY --from=postgres /usr/local/lib/postgresql /usr/local/lib/postgresql
-COPY --from=postgres /usr/local/share/postgresql /usr/local/share/postgresql
-
-# Copy the Spring Boot application
+# Copy the built JAR file
 COPY --from=build /app/target/*.jar app.jar
 
-# Create a script to start both services
-COPY start.sh /app/
-RUN chmod +x /app/start.sh
-
 # Set environment variables
-ENV PGDATA=/var/lib/postgresql/data
-ENV POSTGRES_DB=curriculum_db
-ENV POSTGRES_USER=postgres
-ENV POSTGRES_PASSWORD=postgres
+ENV JAVA_OPTS="-Xmx512m -Xms256m"
 
-EXPOSE 5432 8080
-CMD ["/app/start.sh"] 
+# Expose the port
+EXPOSE 8080
+
+# Run the application
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"] 
